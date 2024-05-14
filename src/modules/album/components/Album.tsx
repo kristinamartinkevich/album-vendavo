@@ -9,7 +9,7 @@ import { Draggable } from 'react-drag-reorder';
 
 function Album() {
     const { albumId } = useParams();
-    const { setPhotos, setFile, photos, file } = useStore();
+    const { setPhotos, setFile, photos, searchTerm, setSearchTerm, filteredPhotos, setFilteredPhotos } = useStore();
 
     async function addPhoto(e) {
         const fileUrl = URL.createObjectURL(e.target.files[0]);
@@ -47,12 +47,20 @@ function Album() {
         }
     }
 
-    const renderOverlay = (props: object, album: Photo) => (
+    const renderOverlay = (props: object, photo: Photo) => (
         <Popover {...props}>
-            <Popover.Header as="h3">{album.title}</Popover.Header>
+            <Popover.Header as="h3">{photo.title}</Popover.Header>
             <Popover.Body>
                 <Row className='justify-content-center'>
-                    <Image alt={album.title} src={album.url} className='photo' />
+                    <Image src={photo.url} className='photo' />
+                </Row>
+                <Row>
+                    <Col>
+                        <Button onClick={() => deletePicture(photo.id)}>Delete</Button>
+                    </Col>
+                    <Col>
+                        <input type="file" onChange={(e) => replacePicture(e, photo.id)} />
+                    </Col>
                 </Row>
             </Popover.Body>
         </Popover>
@@ -61,7 +69,7 @@ function Album() {
     useEffect(() => {
         if (albumId) {
             fetchPhotos(albumId)
-                .then(album => setPhotos(album));
+                .then(album => { setPhotos(album); setFilteredPhotos(album) });
         }
     }, [albumId]);
 
@@ -71,32 +79,45 @@ function Album() {
         setPhotos(photos);
     };
 
+    function handleChange(term) {
+        setSearchTerm(term);
+        setFilteredPhotos(photos.filter(photo =>
+            photo.title.toLowerCase().includes(term.toLowerCase())
+        ));
+        console.log(filteredPhotos)
+    };
+
+    const renderPhotos = () => (
+        <Draggable onPosChange={getChangedPos}>
+            {filteredPhotos.map((photo: Photo) => (
+                <Col key={photo?.id}>
+                    <OverlayTrigger trigger="click"
+                        overlay={(props) => renderOverlay(props, photo)}>
+                        <span>
+                            <Image src={photo?.thumbnailUrl} thumbnail />
+                            <div className='text-truncate title'>{photo?.title}</div>
+                        </span>
+                    </OverlayTrigger>
+                </Col>
+            ))}
+        </Draggable>
+    );
+
     return (
         <Container>
             <GoBackButton />
+            <Row>
+                <Col>
+                    <input
+                        type="text"
+                        placeholder="Search by album title"
+                        value={searchTerm}
+                        onChange={(e) => handleChange(e.target.value)}
+                    />
+                </Col>
+            </Row>
             <Row className='justify-content-center'>
-                {photos ? (
-                    <Draggable onPosChange={getChangedPos}>
-                        {photos?.map((photo: Photo) => (
-                            <Col key={photo?.id}>
-                                <OverlayTrigger
-                                    overlay={(props) => renderOverlay(props, photo)}>
-                                    <Image alt={photo?.title} src={photo?.thumbnailUrl} thumbnail />
-                                </OverlayTrigger>
-                                <Row>
-                                    <Col>
-                                        <Button onClick={() => deletePicture(photo.id)}>Delete</Button>
-                                    </Col>
-                                    <Col>
-                                        <input type="file" onChange={(e) => replacePicture(e, photo.id)} />
-                                    </Col>
-                                </Row>
-                            </Col>
-                        ))}
-                    </Draggable>
-                ) : (
-                    <Spinner animation="border" />
-                )}
+                {photos ? renderPhotos() : <Spinner animation="border" />}
             </Row>
             <Row>
                 <input type="file" onChange={addPhoto} />

@@ -9,6 +9,10 @@ interface StoreState {
     file: File | undefined;
     user: User | undefined;
     albums: Album[];
+    searchTerm: string;
+    filteredPhotos: Photo[];
+    setFilteredPhotos: (filteredPhotos: Photo[]) => void;
+    setSearchTerm: (searchTerm: string) => void;
     setUser: (user: User) => void;
     setAlbums: (albums: Album[]) => void;
     setUsers: (users: User[]) => void;
@@ -26,6 +30,10 @@ const useStore = create<StoreState>((set) => ({
     file: undefined,
     user: undefined,
     albums: [],
+    searchTerm: '',
+    filteredPhotos: [],
+    setFilteredPhotos: (filteredPhotos: Photo[]) => set({ filteredPhotos }),
+    setSearchTerm: (searchTerm: string) => set({ searchTerm }),
     setUser: (user: User) => set({ user }),
     setAlbums: (albums: Album[]) => set({ albums }),
     setUsers: (users) => set({ users }),
