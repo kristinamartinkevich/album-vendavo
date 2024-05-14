@@ -58,3 +58,21 @@ export const deletePhoto = async (photoId: string) => {
         .then((response) => response.json())
         .then((json) => console.log(json));
 }
+
+export const replacePhoto = async (photoId: string, file: string) => {
+    return fetch(`https://jsonplaceholder.typicode.com/photos/${photoId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+            url: file,
+        }),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+        },
+    })
+        .then((response) => response.json())
+        .then((json) => {
+            console.log(json);
+            return json;
+        });
+}
+
