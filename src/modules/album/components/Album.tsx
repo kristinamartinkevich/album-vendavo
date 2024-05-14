@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import GoBackButton from '../../common/components/GoBackButton.tsx';
 import { deletePhoto, fetchPhotos, replacePhoto, uploadPhoto } from '../../../utils/apiService.tsx';
 import useStore from '../../../store';
+import { Draggable } from 'react-drag-reorder';
 
 function Album() {
     const { albumId } = useParams();
@@ -64,12 +65,18 @@ function Album() {
         }
     }, [albumId]);
 
+    const getChangedPos = (currentPos: number, newPos: number) => {
+        const [removedItem] = photos.splice(currentPos, 1);
+        photos.splice(newPos, 0, removedItem);
+        setPhotos(photos);
+    };
+
     return (
         <Container>
             <GoBackButton />
             <Row className='justify-content-center'>
                 {photos ? (
-                    <>
+                    <Draggable onPosChange={getChangedPos}>
                         {photos?.map((photo: Photo) => (
                             <Col key={photo?.id}>
                                 <OverlayTrigger
@@ -86,7 +93,7 @@ function Album() {
                                 </Row>
                             </Col>
                         ))}
-                    </>
+                    </Draggable>
                 ) : (
                     <Spinner animation="border" />
                 )}

@@ -1,10 +1,11 @@
 import { Col, ListGroup, Row, Spinner } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Album, User } from '../../../model/model.ts';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import GoBackButton from '../../common/components/GoBackButton.tsx';
 import { fetchAlbum } from '../../../utils/apiService.tsx';
 import useStore from '../../../store.ts';
+import { Draggable } from 'react-drag-reorder';
 
 interface ProfileProps {
     user?: User;
@@ -49,6 +50,12 @@ function Profile({ }: ProfileProps) {
         }
     }, [userId]);
 
+    const getChangedPos = (currentPos: number, newPos: number) => {
+        const [removedItem] = albums.splice(currentPos, 1);
+        albums.splice(newPos, 0, removedItem);
+        setAlbums(albums);
+    };
+
     return (
         <>
             <GoBackButton />
@@ -67,11 +74,13 @@ function Profile({ }: ProfileProps) {
                         {albums ? (
                             <ListGroup>
                                 <ListGroup.Item><b>Albums</b></ListGroup.Item>
-                                {albums.map((album: Album) => (
-                                    <ListGroup.Item key={album.id} action onClick={() => handleShowAlbum(album.id)}>
-                                        {album.title}
-                                    </ListGroup.Item>
-                                ))}
+                                <Draggable onPosChange={getChangedPos}>
+                                    {albums.map((album: Album) => (
+                                        <ListGroup.Item key={album.id} action onClick={() => handleShowAlbum(album.id)}>
+                                            {album.title}
+                                        </ListGroup.Item>
+                                    ))}
+                                </Draggable>
                             </ListGroup>
                         ) : (
                             <Spinner animation="border" />
