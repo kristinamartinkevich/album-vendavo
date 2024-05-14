@@ -1,0 +1,34 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.img-thumbnail {
+  width: 85px;
+}
+
+.photo {
+  width: 125px;
+}
+
+a,
+.list-group-item-action {
+  font-weight: 500 !important;
+  color: #646cff !important;
+  cursor: pointer;
+}
+
+a:hover,
+.list-group-item-action:hover {
+  text-decoration: underline !important;
+}
+
+b {
+  color: #646cff !important;
+}
+
+.list-group-item {
+  text-align: start;
+}

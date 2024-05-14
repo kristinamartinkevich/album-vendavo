@@ -1,15 +1,4 @@
-# Creating a simple application with React
-
-Via NPM
-```bash
-$ npm create vite@latest
-```
-or Yarn
-```bash
-$ yarn create vite
-```
-
-### The Assignment
+# The Assignment
 
 Your task is to create a web application allowing users to browse albums and photos. Users should have the ability to view, edit, and rearrange albums and photos, as well as add or remove photos. Additionally, users should be able to search for specific albums or photos by title. Each album should display information about its creator. To manage pagination efficiently, implement virtual scrolling with 20 items per page.
 
