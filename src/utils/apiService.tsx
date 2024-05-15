@@ -51,7 +51,7 @@ export const uploadPhoto = async (file: string) => {
     return photo
 }
 
-export const deletePhoto = async (photoId: string) => {
+export const deletePhoto = async (photoId: number) => {
     return fetch(`https://jsonplaceholder.typicode.com/photos/${photoId}`, {
         method: 'DELETE',
     })
@@ -59,7 +59,7 @@ export const deletePhoto = async (photoId: string) => {
         .then((json) => console.log(json));
 }
 
-export const replacePhoto = async (photoId: string, file: string) => {
+export const replacePhoto = async (photoId: number, file: string) => {
     return fetch(`https://jsonplaceholder.typicode.com/photos/${photoId}`, {
         method: 'PATCH',
         body: JSON.stringify({

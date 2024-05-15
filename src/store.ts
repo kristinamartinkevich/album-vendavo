@@ -11,6 +11,10 @@ interface StoreState {
     albums: Album[];
     searchTerm: string;
     filteredPhotos: Photo[];
+    offset: number;
+    hasMore: boolean;
+    setHasMore: (hasMore: boolean) => void;
+    setOffset: (offset: number) => void;
     setFilteredPhotos: (filteredPhotos: Photo[]) => void;
     setSearchTerm: (searchTerm: string) => void;
     setUser: (user: User) => void;
@@ -32,6 +36,10 @@ const useStore = create<StoreState>((set) => ({
     albums: [],
     searchTerm: '',
     filteredPhotos: [],
+    offset: 20,
+    hasMore: false,
+    setHasMore: (hasMore: boolean) => set({ hasMore }),
+    setOffset: (offset: number) => set({ offset }),
     setFilteredPhotos: (filteredPhotos: Photo[]) => set({ filteredPhotos }),
     setSearchTerm: (searchTerm: string) => set({ searchTerm }),
     setUser: (user: User) => set({ user }),

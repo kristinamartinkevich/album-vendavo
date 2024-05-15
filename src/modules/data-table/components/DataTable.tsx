@@ -61,7 +61,7 @@ function DataTable() {
         setAlbumsMap(photosMapData);
     };
 
-    const handleShowUserProfile = (user: User) => {
+    const showUserProfile = (user: User) => {
         navigate(`/users/${user.id}`, { state: { user } });
     }
 
@@ -76,7 +76,7 @@ function DataTable() {
                     <tr key={user.id}>
                         <td>{user.id}</td>
                         <td>
-                            <a onClick={() => handleShowUserProfile(user)}>
+                            <a onClick={() => showUserProfile(user)}>
                                 {user.username}
                             </a>
                         </td>
